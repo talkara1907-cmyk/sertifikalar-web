@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IEEE Bakırçay Sertifika Doğrulama</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f3f4f7;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      margin: 40px auto;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    h1 { color: #1a237e; }
+    input {
+      width: 80%;
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      padding: 10px 18px;
+      font-size: 16px;
+      border: none;
+      background: #1a73e8;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+    .notfound {
+      color: #c0392b;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>IEEE Bakırçay Sertifika Doğrulama</h1>
+    <p>Sertifika numarasını girin veya linkle açın.</p>
+
+    <input id="certId" placeholder="Örn: BIPS-2025-0001">
+    <button onclick="showCert()">Göster</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    // Sertifika görsellerinin bulunduğu klasör
+    const CERT_BASE = 'certs/';
+
+    // URL'den otomatik id al
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      if (id) {
+        document.getElementById('certId').value = id;
+        showCert();
+      }
+    });
+
+    function showCert() {
+      const id = document.getElementById('certId').value.trim();
+      const result = document.getElementById('result');
+      result.innerHTML = '';
+
+      if (!id) {
+        alert('Lütfen sertifika numarasını girin.');
+        return;
+      }
+
+      const img = document.createElement('img');
+      img.src = CERT_BASE + id + '.png';
+      img.alt = 'Sertifika Görseli';
+
+      img.onload = () => {
+        result.innerHTML = `<h3>Sertifika: ${id}</h3>`;
+        result.appendChild(img);
+      };
+
+      img.onerror = () => {
+        result.innerHTML = `<p class="notfound">❌ Sertifika bulunamadı veya numara hatalı.</p>`;
+      };
+    }
+  </script>
+</body>
+</html>
